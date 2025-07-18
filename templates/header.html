@@ -1,0 +1,65 @@
+{% load custom_filters %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> {{ main_title }} </title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            ul {
+                list-style: disc !important;
+                padding-left: 20px !important;
+                }
+
+            ol {
+                list-style: decimal !important;
+                padding-left: 20px !important;
+                }
+            .mc {
+                border-radius: 6px;
+                background-color: #f9f9f9;
+                margin: 10px;   
+            }
+        </style>
+    </head>
+    <body>
+        <div style='font-family: "Space Grotesk", "Noto Sans", sans-serif;' >
+            <header class="flex items-center justify-between px-6 py-4 shadow">
+                <!-- Left: Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="{% url 'home' %}" class="hover:underline"><img src="{% static 'srcp/images/icon.png' %}" class="h-8 w-8"> </a>
+                    <span class="text-xl font-bold"><a href="{% url 'home' %}" class="hover:underline"> Crafty Tips </a></span>
+                </div>
+
+                <!-- Right: Nav + Buttons -->
+                <div class="flex items-center space-x-6">
+                    <!-- Nav -->
+                    <nav class="flex space-x-6 text-sm text-gray-700">
+                        <a href="{% url 'home' %}" class="hover:underline">Home</a>
+                        <a href="{% url 'cat' 'tips' %}" class="hover:underline">Tips</a>
+                        <a href="{% url 'cat' 'hacks' %}" class="hover:underline">Hacks</a>
+                        <a href="{% url 'popular' %}" class="hover:underline">Popular</a>
+                    </nav>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="window.location.href='{% url 'register' %}'" class="bg-green-100 text-green-800 font-semibold px-4 py-1.5 rounded-md hover:bg-green-200">
+                            Register
+                        </button>
+                        <button onclick="window.location.href='{% url 'login' %}'" class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">
+                            Login
+                        </button>
+                        <button class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">🔍 </button>
+                    </div>
+                </div>
+            </header>
+            <div class="flex h-screen">
+                <!-- Main Content -->
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html> 

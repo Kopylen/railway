@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+
+
+        <form action="" class="max-w-xl mx-auto space-y-4" method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {% for f in form %}
+            <label class="block font-medium" for="{{ f.id_for_label }}"> {{ f.label }} </label>
+            {{ f }}
+            <div class="text-red-500 text-sm"> {{ f.errors }} </div>
+            {% endfor %}
+
+            <button type="submit" class="w-full border border-green-500 bg-green-100 font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 hover:bg-green-200 transition"> Submit </button>
+        </form>
+
+    </main>
+{% endblock %}

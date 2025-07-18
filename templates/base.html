@@ -1,0 +1,137 @@
+{% load custom_filters %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> {{ main_title }} </title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            ul {
+                list-style: disc !important;
+                padding-left: 20px !important;
+            }
+
+            li {
+                margin-bottom: 5px;
+            }
+            ul ul {
+                list-style: circle !important;
+                padding-left: 20px;
+            }
+            #mc {
+                border-radius: 6px;
+                background-color: #f9f9f9;
+                margin: 10px;   
+            }
+
+            .post-box {
+                border-radius: 8px;
+                padding: 16px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
+                min-height: 200px;
+                }
+
+
+        </style>
+    </head>
+    <body>
+        <div style='font-family: "Space Grotesk", "Noto Sans", sans-serif;' >
+            <header class="flex items-center justify-between px-6 py-4 shadow">
+                <!-- Left: Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="{% url 'home' %}" class="hover:underline"><img src="{% static 'srcp/images/icon.png' %}" class="h-8 w-8"> </a>
+                    <span class="text-xl font-bold"><a href="{% url 'home' %}" class="hover:underline"> Crafty Tips </a></span>
+                </div>
+
+                <!-- Right: Nav + Buttons -->
+                <div class="flex items-center space-x-6">
+                    <!-- Nav -->
+                    <nav class="flex space-x-6 text-sm text-gray-700">
+                        <a href="{% url 'home' %}" class="hover:underline">Home</a>
+                        <a href="{% url 'cat' 'tips' %}" class="hover:underline">Tips</a>
+                        <a href="{% url 'cat' 'hacks' %}" class="hover:underline">Hacks</a>
+                        <a href="{% url 'popular' %}" class="hover:underline">Popular</a>
+                    </nav>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="window.location.href='{% url 'register' %}'" class="bg-green-100 text-green-800 font-semibold px-4 py-1.5 rounded-md hover:bg-green-200">
+                            Register
+                        </button>
+                        <button onclick="window.location.href='{% url 'login' %}'" class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">
+                            Login
+                        </button>
+                        <button class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">🔍 </button>
+                    </div>
+                </div>
+            </header>
+
+<!-- SideBar left -->
+        
+            <div class="flex h-screen">
+        
+                <aside class="w-60 min-h-screen bg-white border-r px-6 py-8">
+                    <nav class="space-y-4 text-gray-700 font-medium">
+
+                        <!-- Home -->
+                        <a href="{% url 'home' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 transition">
+                            <!-- Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75v10.5A1.75 1.75 0 0 1 19.25 22H4.75A1.75 1.75 0 0 1 3 20.25V9.75z" />
+                            </svg>
+                            <span>Home</span>
+                        </a>
+
+                        <!-- Popular -->
+                        <a href="{% url 'popular' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 3c.6 2.5 2.4 4.3 4 5.7a7.1 7.1 0 01-4 13c-3.3 0-6-2.7-6-6 0-1.4.4-2.7 1-3.8C8 11.3 10 9.2 12 3z" />
+                            </svg>
+                            <span>Popular</span>
+                        </a>
+
+                        <!-- Profile -->
+                        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5.121 17.804A10.967 10.967 0 0112 15c2.55 0 4.894.927 6.879 2.461M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>Profile</span>
+                        </a>
+
+                        <!-- Settings -->
+                        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.591 1.066c1.527-.99 3.485.967 2.495 2.493a1.724 1.724 0 001.066 2.592c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.591c.99 1.527-.967 3.485-2.493 2.495a1.724 1.724 0 00-2.592 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.591-1.066c-1.527.99-3.485-.967-2.495-2.493a1.724 1.724 0 00-1.066-2.592c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.591c-.99-1.527.967-3.485 2.493-2.495a1.724 1.724 0 002.592-1.066z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>Settings</span>
+                        </a>
+                    </nav>
+
+                    <!-- Spacer pushes button to bottom -->
+                    <div class="mt-auto pt-8 max-w-xl mx-auto space-y-4">
+                        <a href="{% url 'add_post' %}"><button class="w-full border border-green-500 bg-green-100 text-green-800 font-semibold px-4 py-2 rounded-md hover:bg-green-200 transition"> 
+                            Add Post
+                        </button></a>
+                    </div>
+
+                    {% get_all_tags %}
+                </aside>
+
+                <!-- Main Content -->
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

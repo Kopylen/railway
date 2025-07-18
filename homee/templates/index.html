@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+        <h1 class="mb-4" style="font-size: 27px;"> {{ title }} </h1>
+        {% if not post %}
+            <p class="mb-4" style="color:rgb(99, 97, 97);"> There are currently no posts.</p>
+        {% else %}
+            <div class="grid grid-cols-2 gap-4">
+                {% for d in post %}
+                    <a href="{{ d.get_absolute_url }}">
+                        <div class="bg-gray-100 p-6 rounded border border-gray-400 post-box">
+                            <h5><b>{{ d.cat }} - {{ d.author }} <div class="text-right text-sm"> Published: {{ d.time|date:"d-m-Y" }} </div> </b></h5>
+                            <hr />
+                            <h1 class="text-center font-bold my-2">{{ d.title }}</h1>
+                            {% if d.photo %}
+                                <img class="w-full h-auto rounded-lg shadow-md" alt="image" src="{{ d.photo.url }}">
+                            {% else %}
+                                <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600">
+                                    No image available
+                                </div>
+                            {% endif %}
+                            <h2>{{ d.about|truncatewords:60 }}</h2>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+{% endblock %}

@@ -1,0 +1,38 @@
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1e1e2f;
+    color: #e0e0f0;
+  }
+
+  #header {
+    background: linear-gradient(90deg, #2c2c54, #3c3c8f);
+    border-bottom: 4px solid #2a2a70;
+  }
+
+  #header a {
+    color: #f8f8ff;
+  }
+
+  #header a:hover {
+    color: #ffd700;
+  }
+
+  .module {
+    background-color: #2a2a3c;
+    border: 1px solid #444;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  .module h2 {
+    color: #aabbee;
+  }
+
+  .button, input[type="submit"], input[type="button"] {
+    background-color: #3c3c8f;
+    color: #fff;
+  }
+
+  .button:hover, input[type="submit"]:hover, input[type="button"]:hover {
+    background-color: #2a2a70;
+  }
+}
