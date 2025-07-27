@@ -5,6 +5,13 @@
 {% block content %}
 <!-- Main Content -->
 <main class="flex-1 p-6">
+    <nav class="flex navbar navbar-light bg-light mx-6 mb-6">
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+
     <!-- Users List -->
     <div class="space-y-6 max-w-7xl w-full ml-6">
         {% for useer in users %}

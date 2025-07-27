@@ -28,7 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '2s500b5r-3000.euw.devtunnels.ms',  # Your Dev Tunnel domain
+    '2s500b5r-3000.euw.devtunnels.ms',
+    '.railway.app',
 ]
 INTERNAL_IPS = ["127.0.0.1"]
 
