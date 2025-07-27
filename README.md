@@ -42,24 +42,24 @@
 git clone https://github.com/Kopylen/CraftyNet.git
 cd CraftyNet
 
-### Create a virtual environment
+Create a virtual environment:
 
 python3 -m venv env
 source env/bin/activate   # macOS/Linux
 env\Scripts\activate      # Windows
 
-### Install dependencies
+Install dependencies:
 
 pip install -r requirements.txt
 
-### Run migrations
+Run migrations:
 
 python manage.py migrate
 
-### Create superuser
+Create superuser:
 
 python manage.py createsuperuser
 
-### Run the development server
+Run the development server: 
 
 python manage.py runserver
