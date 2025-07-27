@@ -1,0 +1,7 @@
+# Ignore environment variables
+myproject/.env
+
+# Ignore virtual environment
+env/
+ENV/
+venv/

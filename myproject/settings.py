@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 
 from environ import Env
+import dj_database_url
 
 env = Env()
 Env.read_env()
@@ -98,6 +99,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+if ENVIRONMENT == 'production':
+    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
+else:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+
 
 
 # Password validation
