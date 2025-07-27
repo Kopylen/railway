@@ -1,20 +1,27 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from homee.views import home, post, show_tags, add_post
-from category.views import categories
+from homee.views import *
+from homee.views import delete_reply
+from category.views import Category
 from popular.views import popular
-from logr.views import login, register
+from users.views import *
 
 urlpatterns = [
-    path('', home, name="home"),
+    path('', HomePage.as_view(), name="home"),
     path('popular/', popular, name='popular'),
-    path('login/', login, name='login'),
-    path('register/', register, name='register'),
-    path('post/<slug:post_slug>/', post, name='post'),
-    path('category/<slug:cat_slug>/', categories, name='cat'),
-    path('tag/<slug:tag_slug>/', show_tags, name='tag'),
-    path('addpost/', add_post, name='add_post'),
+    path('post/<int:post_id>/', ShowPost.as_view(), name='post'),
+    path('category/<slug:cat_slug>/', Category.as_view(), name='cat'),
+    path('tag/<slug:tag_slug>/', Tags.as_view(), name='tag'),
+    path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
+    path('comment/delete/<slug:comment_id>/', delete_comment, name='delete_comment'),
+    path('comment/<slug:comment_id>/reply/', add_reply, name='add_reply'),
+    path('reply/delete/<slug:reply_id>/', delete_reply, name='delete_reply'),
+    
+    path('addpost/', AddPage.as_view(), name='add_post'),
+    path('delete/<int:pk>/', DeletePage.as_view(), name='delete'),
+    path('like/<int:post_id>/', like_post, name='like_post'),
+    path('users/', UserView.as_view(), name='users')
 ]
 
 

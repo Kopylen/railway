@@ -17,17 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import homee.urls
+import logr.urls
+import subscriptions.urls
 from myproject import settings
 from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include(homee.urls)),
-    path('__debug__/', include('debug_toolbar.urls')),
+    path('users/', include('logr.urls', namespace='users')),
+    path('', include(subscriptions.urls)),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     
 admin.site.site_header = 'Panel Administration'
 admin.site.index_title = 'Minecraft Administration'

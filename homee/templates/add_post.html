@@ -5,19 +5,29 @@
     <!-- Main Content -->
     <main class="flex-1 p-6">
 
+        {% if type != 'd' %}
+            <form action="" class="max-w-xl mx-auto space-y-4" method="post" enctype="multipart/form-data">
 
-        <form action="" class="max-w-xl mx-auto space-y-4" method="post" enctype="multipart/form-data">
+                <h1 class="mb-4 text-center" style="font-size: 27px;"> {{ title }} </h1>
+                <br /> 
 
-            {% csrf_token %}
+                {% csrf_token %}
 
-            {% for f in form %}
-            <label class="block font-medium" for="{{ f.id_for_label }}"> {{ f.label }} </label>
-            {{ f }}
-            <div class="text-red-500 text-sm"> {{ f.errors }} </div>
-            {% endfor %}
+                {% for f in form %}
+                <label class="block font-medium" for="{{ f.id_for_label }}"> {{ f.label }} </label>
+                {{ f }}
+                <div class="text-red-500 text-sm"> {{ f.errors }} </div>
+                {% endfor %}
 
-            <button type="submit" class="w-full border border-green-500 bg-green-100 font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 hover:bg-green-200 transition"> Submit </button>
-        </form>
+                <button type="submit" class="w-full border border-green-500 bg-green-100 font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 hover:bg-green-200 transition"> Submit </button>
+            </form>
+        {% else %}
+            <form method="post" class="max-w-xl mx-auto space-y-4">{% csrf_token %}
+                <p class="mb-4 text-center">Are you sure you want to delete "{{ object }}"?</p>
+                {{ form }}
+                <button type="submit" class="w-full border border-green-500 bg-green-100 font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 hover:bg-green-200 transition"> Confirm </button>
+            </form>
+        {% endif %}
 
     </main>
 {% endblock %}

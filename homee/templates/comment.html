@@ -1,0 +1,29 @@
+<div class="bg-white p-5 mb-4 rounded-xl border border-gray-200 shadow-sm hover:shadow transition">
+    <div class="flex items-start justify-between">
+        <div>
+            <p class="text-base font-semibold text-gray-800">
+                {{ comment.author.username|default:'Anonymous' }}
+                <span class="text-sm text-gray-500 ml-2">{{ comment.created|date:"d M Y H:i" }}</span>
+            </p>
+            <p class="mt-2 text-gray-700 text-[15px] leading-relaxed">
+                {{ comment.body }}
+            </p>
+        </div>
+        {% if comment.author == request.user %}
+            <form method="post" action="{% url 'delete_comment' comment.id %}">
+                {% csrf_token %}
+                <button type="submit"
+                        class="text-red-500 text-xs font-medium hover:text-red-700 transition-all duration-200">
+                    Delete
+                </button>
+            </form>
+
+        {% endif %}
+
+         <!-- Reply section -->
+            {% for reply in comments.replies.all %}
+                {% include 'reply.html' %}
+            {% endfor %}
+         
+    </div>
+</div>

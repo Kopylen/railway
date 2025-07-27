@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from .models import Home, Categories, TagPost
+from .models import *
 from django.utils.safestring import mark_safe
 
 # class FilterPost(admin.SimpleListFilter):
@@ -17,11 +17,11 @@ from django.utils.safestring import mark_safe
 
 @admin.register(Home)
 class McAdmin(admin.ModelAdmin):
-    fields = ['title', 'author', 'slug', 'photo', 'post_photo', 'about', 'tags', 'cat']
-    readonly_fields = ['author', 'slug', 'post_photo']
-    filter_horizontal = ['tags']
+    fields = ['title', 'slug', 'photo', 'post_photo', 'about', 'tags', 'cat']
+    readonly_fields = [ 'slug', 'post_photo']
+    #filter_horizontal = ['tags']
     #filter_vertical = ['tags']
-    list_display = ('title', 'author', 'post_photo', 'time', 'is_published', 'cat')
+    list_display = ('title', 'post_photo', 'time', 'is_published', 'cat')
     list_display_links = ('title', )
     ordering = ['-time', 'likes']
     list_editable = ('is_published', )
@@ -58,3 +58,6 @@ class CategoryAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'tag', 'slug')
     list_display_links = ('id', 'tag')
+
+admin.site.register(Comment)
+admin.site.register(Reply)

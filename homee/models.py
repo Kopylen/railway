@@ -1,6 +1,9 @@
+import uuid
 from django.utils.text import slugify
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
 class PublishedManager(models.Manager):
@@ -14,13 +17,11 @@ class Home(models.Model):
 
     time = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
-    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, blank=True)
     title = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to="photos/%Y/%m/%d", default=None, blank=True, null=True, verbose_name='Image')
-    content = models.CharField(max_length=255, blank=True)
-    author = models.CharField(max_length=255, unique=False)
+    photo = models.ImageField(upload_to="static/photos/%Y/%m/%d", default=None, blank=True, null=True, verbose_name='Image')
     status = models.CharField(max_length=255)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(get_user_model(), related_name='liked_posts', blank=True)
     about = models.TextField(blank=True)
     post = models.TextField(blank=True)
     is_published = models.BooleanField(choices=tuple(map(lambda x: (bool(x[0]), x[1]) ,Status.choices)), 
@@ -28,7 +29,8 @@ class Home(models.Model):
 
     cat = models.ForeignKey('Categories', on_delete=models.PROTECT, related_name='posts')
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags')
-
+    tags2 = models.ManyToManyField('TagPost2', blank=True, related_name='posts2')
+    author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='author', null=True, default=None)
 
     objects = models.Manager()
     published = PublishedManager()
@@ -38,7 +40,7 @@ class Home(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_slug': self.slug})
+        return reverse('post', kwargs={'post_id': self.pk})
     
     def save(self, *args, **kwargs):
         if 1:
@@ -53,7 +55,7 @@ class Home(models.Model):
     
     class Meta:
         verbose_name = "Content"
-        ordering = ["-time"]
+        ordering = ["-time_update"]
         indexes = [
             models.Index(fields=ordering)
         ]
@@ -89,5 +91,52 @@ class TagPost(models.Model):
         verbose_name = "Tag"        
         verbose_name_plural = "Tags"
 
+class TagPost2(models.Model):
+    tag = models.CharField(max_length=255, db_index=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+
+    def __str__(self):
+        return self.tag
+    
+    def get_absolute_url(self):
+        return reverse('tag2', kwargs={'tag_slug': self.slug})
+    
+    class Meta:
+        verbose_name = "Tag2"        
+        verbose_name_plural = "Tags2"
+
 class UploadFiles(models.Model):
     file = models.FileField(upload_to='upload_model')
+
+class Comment(models.Model):
+    author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, related_name='comments')
+    parent_post = models.ForeignKey(Home, on_delete=models.CASCADE, related_name='comments')
+    body = models.CharField(max_length=150)
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.CharField(max_length=100, default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+
+    def __str__(self):
+        try:
+            return f'{self.author.username} : {self.body[:30]}'
+        except:
+            return f'no author : {self.body[:30]}'
+        
+    class Meta:
+        ordering = ['-created']
+
+
+class Reply(models.Model):
+    author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, related_name='replies')
+    parent_comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replies')
+    body = models.CharField(max_length=150)
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.CharField(max_length=100, default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+
+    def __str__(self):
+        try:
+            return f'{self.author.username} : {self.body[:30]}'
+        except:
+            return f'no author : {self.body[:30]}'
+        
+    class Meta:
+        ordering = ['created']

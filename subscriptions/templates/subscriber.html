@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+<main class="p-6">
+    <!-- Profile Header -->
+    <div class="flex px-6 pt-6 w-full max-w-6xl">
+        <div class="flex-1 w-full">
+            <h1 class="font-bold text-3xl text-[#111713]">{{ to_user.first_name }} {{ to_user.last_name }}</h1>
+            <a href="{% url 'users:user_profile' to_user.id %}"><p class="text-gray-500 mb-6">@{{ to_user.username }}</p></a>
+            <div class="flex space-x-6">
+                <a href="{% url 'subscriber' to_user.id %}"><span class="font-bold text-[#111713] underline">{{followers.count}} followers</span></a>
+                <a href="{% url 'subscription' to_user.id %}"><span class="text-[#111713]">{{following.count}} followings</span></a>
+            </div>
+        </div>
+    </div>
+
+    <hr class="mb-6 w-full">
+
+    <!-- Subscribers List -->
+    <div class="space-y-6 w-full ml-6">
+        {% for follower in followers %}
+        <div class="flex justify-between">
+            <!-- Avatar and Name -->
+            <div class="flex items-center">
+                {% if follower.subscriber.photo %}
+                    <img class="rounded-full object-cover w-12 h-12" src="{{ follower.subscriber.photo.url }}">
+                {% else %}
+                    <img class="rounded-full object-cover w-12 h-12" src="{% static '/users/default.png' %}">
+                {% endif %}
+                <div class="ml-4">
+                    <p class="font-bold text-[#111713]">{{ follower.subscriber.first_name }} {{ follower.subscriber.last_name }}</p>
+                    <a href="{% url 'users:user_profile' follower.subscriber.id %}"><p class="text-gray-500">@{{ follower.subscriber.username }}</p></a>
+                </div>
+            </div>
+            {% if follower.subscriber.id in following_ids %}
+                <a href="{% url 'subscribe' follower.subscriber.id %}">
+                    <button class="w-45 py-2 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition">
+                        Unfollow
+                    </button>
+                </a>
+            {% elif follower.subscriber.id != user.id %}
+                <a href="{% url 'subscribe' follower.subscriber.id %}">
+                    <button class="w-45 py-2 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition">
+                        Follow
+                    </button>
+                </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

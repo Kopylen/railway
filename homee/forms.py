@@ -1,18 +1,18 @@
 from django import forms
-from .models import Categories as Category, Home
-from .models import TagPost
+from .models import *
+from .models import TagPost, TagPost2
 from django.core.exceptions import ValidationError
 
 class AddPost(forms.ModelForm):
-    cat = forms.ModelChoiceField(queryset=Category.objects.all(), label='Category', empty_label="Doesn't choosen   ")
+    cat = forms.ModelChoiceField(queryset=Categories.objects.all(), label='Category', empty_label="Doesn't choosen   ")
 
     class Meta:
         model = Home
-        fields = ['title', 'slug', 'photo', 'author', 'about', 'post', 'is_published', 'cat', 'tags']
+        fields = ['title', 'photo', 'about', 'post', 'is_published', 'cat', 'tags']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}),
-            'slug': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}),
-            'author': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}),
+            #'slug': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}),
+            #'author': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}),
             'about': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded', 'rows': 5}),
             'post': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded', 'rows': 6}),
             'tags': forms.SelectMultiple(attrs={'class': 'w-full border border-gray-500 rounded'})
@@ -21,13 +21,20 @@ class AddPost(forms.ModelForm):
             'slug': 'URL',
         }
 
-    # def clean_title(self):
-    #     title = self.cleaned_data['title']
-    #     if len(title)>50:
-    #         raise forms.ValidationError("Title must be less than 50 characters.")
-        
-    #     return title
 
+class UpdatePost(forms.ModelForm):
+    cat = forms.ModelChoiceField(queryset=Categories.objects.all(), label='Category', empty_label="Doesn't choosen")
+
+    class Meta:
+        model = Home
+        fields = ['title', 'photo', 'about', 'post', 'is_published', 'cat', 'tags']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}),
+            #'author': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}),
+            'about': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded', 'rows': 5}),
+            'post': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded', 'rows': 6}),
+            'tags': forms.SelectMultiple(attrs={'class': 'w-full border border-gray-500 rounded'}),
+        }
 
 
 class UploadFileForm(forms.Form):
@@ -36,12 +43,17 @@ class UploadFileForm(forms.Form):
 
 
 
-
-    # title = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}))
-    # slug = forms.SlugField(widget=forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}), label='URL')
-    # author = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded'}))
-    # about = forms.CharField(widget=forms.Textarea(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded', 'rows': 5}))
-    # post = forms.CharField(widget=forms.Textarea(attrs={'class': 'w-full px-4 py-2 border border-gray-500 rounded', 'rows': 6}))
-    # is_published = forms.BooleanField(required=False)
-    # cat = forms.ModelChoiceField(queryset=Category.objects.all(), label='Category', empty_label="Doesn't choosen   ")
-    # #tag = forms.ModelChoiceField(queryset=TagPost.objects.all(), widget=forms.SelectMultiple(attrs={'class': 'w-full border border-gray-500 rounded'}), label='Tags')
+class ReplyCreatForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ['body']
+        widgets = {
+            'body': forms.Textarea(attrs={
+                'class': 'w-full p-2 border border-gray-300 rounded text-sm resize-none focus:outline-none focus:ring-1 focus:ring-blue-400',
+                'rows': 2,
+                'placeholder': 'Write a reply...'
+            })
+        }
+        labels = {
+            'body': ''
+        }

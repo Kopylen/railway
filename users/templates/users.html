@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+<!-- Main Content -->
+<main class="flex-1 p-6">
+    <!-- Users List -->
+    <div class="space-y-6 max-w-7xl w-full ml-6">
+        {% for useer in users %}
+        <div class="flex justify-between shadow-sm rounded-xl p-4">
+            <!-- Avatar and Name -->
+            <div class="flex items-center">
+                {% if useer.photo %}
+                    <img class="rounded-full object-cover w-12 h-12" src="{{ useer.photo.url }}">
+                {% else %}
+                    <img class="rounded-full object-cover w-12 h-12" src="{% static '/users/default.png' %}">
+                {% endif %}
+                <div class="ml-4">
+                    <p class="font-bold text-[#111713]">{{ useer.first_name }} {{ useer.last_name }}</p>
+                    <a href="{% url 'users:user_profile' useer.id %}"><p class="text-gray-500">@{{ useer.username }}</p></a>
+                </div>
+            </div>
+            {% if useer.id in following_ids %}
+                <a href="{% url 'subscribe' useer.id %}">
+                    <button class="w-45 py-2 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition">
+                        Unfollow
+                    </button>
+                </a>
+            {% elif user.id != useer.id %}
+                <a href="{% url 'subscribe' useer.id %}">
+                    <button class="w-45 py-2 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition">
+                        Follow
+                    </button>
+                </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

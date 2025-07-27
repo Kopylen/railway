@@ -1,0 +1,62 @@
+{% extends 'header.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<main class="flex-1 p-6">
+<div class="flex justify-center mt-8">
+    <div class="w-full max-w-7xl p-6 rounded border border-white">
+        <h1 class="font-bold text-2xl"> My posts </h1>
+        {% if not is_superuser %}
+            <table class="border-gray-400 p-6 w-full border-collapse border">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border px-4 py-2 text-left">Title</th>
+                        <th class="border px-4 py-2 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td class="border px-4 py-2">{{ post.title }}</td>
+                        <td class="border px-4 py-2">
+                            <a href="{% url 'users:edit_post' post.id %}" class="text-blue-600 hover:underline">Edit</a> |
+                            <a href="{% url 'delete' post.id %}" class="text-red-600 hover:underline">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center py-4 text-gray-500">No posts found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <table class="border-gray-400 p-6 w-full border-collapse border">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border px-4 py-2 text-left">Title</th>
+                        <th class="'boder px-4 py-2 text-left"> Author </th>
+                        <th class="border px-4 py-2 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td class="border px-4 py-2">{{ post.title }}</td>
+                        <td class="border px-4 py-2">{{ post.author }}</td>
+                        <td class="border px-4 py-2">
+                            <a href="{% url 'users:edit_post' post.id %}" class="text-blue-600 hover:underline">Edit</a> |
+                            <a href="{% url 'delete' post.id %}" class="text-red-600 hover:underline">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center py-4 text-gray-500">No posts found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div></main>
+{% endblock %}

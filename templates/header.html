@@ -3,63 +3,121 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title> {{ main_title }} </title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
-            ul {
-                list-style: disc !important;
-                padding-left: 20px !important;
-                }
+<head>
+    <meta charset="UTF-8">
+    <title>CraftyNet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        ul {
+            list-style: disc !important;
+            padding-left: 20px !important;
+        }
 
-            ol {
-                list-style: decimal !important;
-                padding-left: 20px !important;
-                }
-            .mc {
-                border-radius: 6px;
-                background-color: #f9f9f9;
-                margin: 10px;   
-            }
-        </style>
-    </head>
-    <body>
-        <div style='font-family: "Space Grotesk", "Noto Sans", sans-serif;' >
-            <header class="flex items-center justify-between px-6 py-4 shadow">
-                <!-- Left: Logo -->
-                <div class="flex items-center space-x-2">
-                    <a href="{% url 'home' %}" class="hover:underline"><img src="{% static 'srcp/images/icon.png' %}" class="h-8 w-8"> </a>
-                    <span class="text-xl font-bold"><a href="{% url 'home' %}" class="hover:underline"> Crafty Tips </a></span>
-                </div>
+        li {
+            margin-bottom: 5px;
+        }
 
-                <!-- Right: Nav + Buttons -->
-                <div class="flex items-center space-x-6">
-                    <!-- Nav -->
-                    <nav class="flex space-x-6 text-sm text-gray-700">
-                        <a href="{% url 'home' %}" class="hover:underline">Home</a>
-                        <a href="{% url 'cat' 'tips' %}" class="hover:underline">Tips</a>
-                        <a href="{% url 'cat' 'hacks' %}" class="hover:underline">Hacks</a>
-                        <a href="{% url 'popular' %}" class="hover:underline">Popular</a>
-                    </nav>
+        ul ul {
+            list-style: circle !important;
+            padding-left: 20px;
+        }
 
-                    <!-- Buttons -->
+        #mc {
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            margin: 10px;
+        }
+
+        .post-box {
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+
+        <!-- Header -->
+        <header class="w-full bg-white shadow-sm sticky top-0 z-50">
+            <div class="w-full px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center space-x-12">
                     <div class="flex items-center space-x-2">
-                        <button onclick="window.location.href='{% url 'register' %}'" class="bg-green-100 text-green-800 font-semibold px-4 py-1.5 rounded-md hover:bg-green-200">
-                            Register
-                        </button>
-                        <button onclick="window.location.href='{% url 'login' %}'" class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">
-                            Login
-                        </button>
-                        <button class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">🔍 </button>
+                        <a href="{% url 'home' %}">
+                            <img src="{% static 'srcp/images/icon.png' %}" class="h-8 w-8">
+                        </a>
+                        <span class="text-xl font-bold text-green-700">
+                            <a href="{% url 'home' %}">CraftyNet</a>
+                        </span>
                     </div>
+                    <nav class="hidden md:flex space-x-6 text-gray-700 font-medium">
+                        <a href="{% url 'home' %}" class="hover:text-green-600">Home</a>
+                        <a href="{% url 'cat' 'tips' %}" class="hover:text-green-600">Tips</a>
+                        <a href="{% url 'cat' 'hacks' %}" class="hover:text-green-600">Hacks</a>
+                        <a href="{% url 'popular' %}" class="hover:text-green-600">Popular</a>
+                    </nav>
                 </div>
-            </header>
-            <div class="flex h-screen">
-                <!-- Main Content -->
-                {% block content %}
-                {% endblock %}
+
+                <!-- Right: User Controls -->
+                <div class="ml-auto flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                    <div class="relative">
+                        <div id="userMenuButton" class="flex items-center bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium cursor-pointer">
+                            {% if user.photo %}
+                                <p><img class="rounded-circle d-block mx-auto" width="40" src="{{ user.photo.url }}"></p>
+                            {% else %}
+                                <p><img class="rounded-circle d-block mx-auto" width="40" src="{% static '/users/default.png' %}"></p>
+                            {% endif %}
+                            <!--<span>{{ user.username }}</span>-->
+                        </div>
+                        <div id="userDropdown" class="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-50 hidden">
+                            <a href="{% url 'users:profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="{% url 'users:setting' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            <a href="{% url 'users:logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Log Out</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <button onclick="window.location.href='{% url 'users:login' %}'" class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">
+                        Login
+                    </button>
+                    <button onclick="window.location.href='{% url 'users:register' %}'" class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">
+                        Register
+                    </button>
+                    {% endif %}
+                    <button class="bg-gray-100 text-gray-800 font-semibold px-4 py-1.5 rounded-md hover:bg-gray-200">🔍</button>
+                </div>
             </div>
+        </header>
+
+        <!-- Layout Body -->
+        <div class="flex h-screen">
+            <!-- Main Content -->
+            {% block content %}
+            {% endblock %}
         </div>
-    </body>
-</html> 
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const button = document.getElementById('userMenuButton');
+        const dropdown = document.getElementById('userDropdown');
+
+        button.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
+</script>
+</body>
+</html>

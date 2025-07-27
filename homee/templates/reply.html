@@ -1,0 +1,15 @@
+            <div x-data="{ open: false }" class="mt-2 w-full">
+                <button @click="open = !open" class="text-blue-500 text-xs hover:underline">Reply</button>
+                <div x-show="open" class="mt-2">
+                    <form method="post" action="{% url 'add_reply' comment.id %}">
+                        {% csrf_token %}
+                        <textarea name="reply_body" rows="2" maxlength="150" required
+                                    class="w-full p-2 border border-gray-300 rounded text-sm resize-none focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                    placeholder="Write a reply..."></textarea>
+                        <button type="submit"
+                                class="mt-1 px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition">
+                            Post Reply
+                        </button>
+                    </form>
+                </div>
+            </div>

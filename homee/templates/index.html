@@ -1,32 +1,39 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
+{% load static %}
 
 {% block content %}
     <!-- Main Content -->
-    <main class="flex-1 p-6">
-        <h1 class="mb-4" style="font-size: 27px;"> {{ title }} </h1>
+    <main class="max-w-3xl mx-auto p-6">
         {% if not post %}
             <p class="mb-4" style="color:rgb(99, 97, 97);"> There are currently no posts.</p>
         {% else %}
-            <div class="grid grid-cols-2 gap-4">
+            <section class="flex flex-col space-y-6">
                 {% for d in post %}
-                    <a href="{{ d.get_absolute_url }}">
-                        <div class="bg-gray-100 p-6 rounded border border-gray-400 post-box">
-                            <h5><b>{{ d.cat }} - {{ d.author }} <div class="text-right text-sm"> Published: {{ d.time|date:"d-m-Y" }} </div> </b></h5>
-                            <hr />
-                            <h1 class="text-center font-bold my-2">{{ d.title }}</h1>
-                            {% if d.photo %}
-                                <img class="w-full h-auto rounded-lg shadow-md" alt="image" src="{{ d.photo.url }}">
+                    <a href="{% url 'post' d.id %}"><article class="bg-white rounded-xl shadow-sm hover:shadow-md transition p-5 mb-8">
+                        <div class="flex space-x-4">
+                            {% if d.author.photo %}
+                                <img class="w-12 h-12 rounded-full object-cover" src="{{ d.author.photo.url }}" alt="{{ d.author.username }}'s avatar">
                             {% else %}
-                                <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600">
-                                    No image available
-                                </div>
+                                <img class="w-12 h-12 rounded-full object-cover" src="{% static '/users/default.png' %}" alt="Default avatar">
                             {% endif %}
-                            <h2>{{ d.about|truncatewords:60 }}</h2>
+                            <div class="flex-1">
+                                <header class="flex items-center space-x-2">
+                                    <h2 class="font-semibold text-gray-900"> {{d.author.first_name}} {{d.author.last_name}} </h2>
+                                    <a href="{% url 'users:user_profile' d.author.id %}"><span class="text-gray-500"> @{{d.author.username}} </span></a>
+                                    <time class="text-gray-400 text-sm ml-auto">{{ d.time|date:"M d, Y" }}</time>
+                                </header>
+                                    {% if d.about %}
+                                    <p class="mt-1 text-gray-700 text-sm">{{ d.about|safe }}</p>
+                                {% endif %}
+                                <div class="mt-2 text-gray-900 text-base">
+                                    {{ d.post|safe }}
+                                </div>
+                            </div>
                         </div>
-                    </a>
+                    </article></a>
                 {% endfor %}
-            </div>
+            </section>
         {% endif %}
     </main>
 {% endblock %}
