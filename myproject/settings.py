@@ -22,8 +22,14 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = Env()
-Env.read_env(os.path.join(BASE_DIR, "myproject/.env"))
-ENVIRONMENT = env('ENVIRONMENT', default='production')
+ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+
+if ENVIRONMENT == "development":
+    Env.read_env(os.path.join(BASE_DIR, "myproject/.env"))
+else:
+    Env.read_env()  # This will use environment variables from Railway
+
+ENVIRONMENT = env("ENVIRONMENT", default="production")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
